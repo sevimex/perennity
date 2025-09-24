@@ -1,0 +1,22 @@
+---
+import { getLocaleUrl } from '@/i18n/utils'
+
+export interface Props {
+  children: any
+  href?: string
+  target?: '_blank'
+  class?: string
+}
+
+const { class: className, href, target, ...props } = Astro.props
+---
+
+<a
+  href={href && !target ? getLocaleUrl(Astro, href) : href}
+  rel={target ? 'noreferrer noopener' : null}
+  class:list={[className]}
+  target={target}
+  {...props}
+>
+  <slot />
+</a>

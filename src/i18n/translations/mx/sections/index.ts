@@ -1,0 +1,8 @@
+export { default as headerHome } from './headerHome'
+export { default as testimonials } from './testimonials'
+export { default as products } from './products'
+export { default as contact } from './contact'
+export { default as certifications } from './certifications'
+export { default as solutions } from './solutions'
+export { default as privacyNotice } from './privacy-notice'
+export { default as table } from './table'

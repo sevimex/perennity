@@ -1,0 +1,74 @@
+---
+import { Image } from 'astro:assets'
+
+import { getI18n } from '@/i18n/utils'
+
+import styles from '@/components/Button/styles.module.css'
+
+import H from '@/components/H.astro'
+import ScrollTo from '@/components/ScrollTo'
+import Button from '@/components/Button/Button.astro'
+
+interface Props {
+  icon: ImageMetadata
+  name: string
+  content: string
+  cta?: {
+    url: string
+  }
+}
+
+const { icon, name, content, cta } = Astro.props
+const i18n = getI18n(Astro)
+---
+
+<section
+  class='bg-white
+grid
+grid-cols-1
+grid-rows-[auto_1fr_auto]
+gap-1
+h-full
+border
+border-gray-200
+shadow-[0rem_0.8125rem_1rem_rgba(0,0,0,0.08)]
+rounded-2xl
+text-center
+pb-10'
+>
+  <Image
+    src={icon}
+    alt={name}
+    width='180'
+    height='140'
+    format='svg'
+    class='mx-auto -mt-24'
+  />
+  <div class='px-5 pb-10 sm:px-10'>
+    <H type='h3' line={false} class='!mb-5'>{name}</H>
+    <p>{content}</p>
+  </div>
+  <span>
+    {
+      (cta && (
+        <Button
+          href={cta.url}
+          target='_blank'
+          variant='secondary'
+          class={styles['btn']}
+        >
+          {i18n.buttons.knowMore}
+        </Button>
+      )) || (
+        <ScrollTo
+          client:only='react'
+          to='contact'
+          css-variant='secondary'
+          class={styles['btn']}
+        >
+          {i18n.buttons.knowMore}
+        </ScrollTo>
+      )
+    }
+  </span>
+</section>

@@ -1,0 +1,16 @@
+---
+interface Props {
+  children: any
+  id: string
+  class?: string
+  style?: string
+}
+
+const { class: className, id, style } = Astro.props
+
+export const padding = 'py-10 md:py-16 lg:py-20'
+---
+
+<section id={id} class:list={[padding, className]} style={style}>
+  <slot />
+</section>

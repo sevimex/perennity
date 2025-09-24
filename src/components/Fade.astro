@@ -1,0 +1,75 @@
+---
+interface Props {
+  class?: any
+  children: any
+  options?: {
+    autoHeight?: boolean
+    inOut?: boolean
+    show?: boolean
+    duration?: number /* seconds */
+    delay?: number /* seconds */
+    direction?: 'up' | 'down' | 'left' | 'right'
+  }
+}
+
+const { class: className, options } = Astro.props
+
+const duration = `${options?.duration ?? 1}s`
+const delay = `${options?.delay ?? 0.2}s`
+const autoHeight = `${options?.autoHeight ? 'auto' : '100%'}`
+---
+
+<div
+  data-fade={JSON.stringify({ ...options })}
+  data-fade-direction={options?.direction}
+  data-fade-show={options?.show}
+  class:list={[className]}
+>
+  <slot />
+</div>
+
+<script>
+  import isVisible from '@/helpers/isVisible'
+
+  const fades = document.querySelectorAll('[data-fade]')
+
+  fades.forEach((fade) => {
+    const props = JSON.parse(fade.getAttribute('data-fade') as string)
+
+    isVisible(fade, {
+      inOut: props?.inOut,
+      visible: () => fade.setAttribute('data-fade-show', 'true'),
+      notVisible: () => fade.removeAttribute('data-fade-show'),
+      options: {
+        threshold: 0.1
+      }
+    })
+  })
+</script>
+
+<style define:vars={{ duration, delay, autoHeight }}>
+  [data-fade] {
+    height: var(--autoHeight);
+    opacity: 0;
+    transition:
+      opacity var(--duration) ease var(--delay),
+      transform var(--duration) ease var(--delay);
+  }
+
+  [data-fade-direction='down'] {
+    transform: translate(0, -50%);
+  }
+  [data-fade-direction='up'] {
+    transform: translate(0, 50%);
+  }
+  [data-fade-direction='right'] {
+    transform: translate(-50%, 0%);
+  }
+  [data-fade-direction='left'] {
+    transform: translate(50%, 0%);
+  }
+  [data-fade-show] {
+    opacity: 1;
+    transform: translate(0, 0%);
+  }
+</style>

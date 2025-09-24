@@ -1,0 +1,30 @@
+---
+import Main from '@/layouts/Main.astro'
+
+import { getI18n } from '@/i18n/utils'
+
+import Section from '@/components/Section.astro'
+import Box from '@/components/Box.astro'
+import Button from '@/components/Button/Button.astro'
+import Particles from '@/components/Particles'
+
+const i18n = getI18n(Astro)
+---
+
+<Main title={i18n.E404.title}>
+  <Section id='404' class='flex flex-col justify-center relative' style='height: calc(100% - 4.0625rem)'>
+    <Particles client:only='react' color='#ddd' min={3} max={8} />
+    <Box class='max-w-screen-sm text-center relative z-10'>
+      <h1 class='mb-4 text-7xl font-bold lg:text-9xl text-primary'>404</h1>
+      <p class='mb-4 text-3xl font-bold text-gray-900 md:text-4x'>
+        {i18n.E404.title}
+      </p>
+      <p class='mb-10 text-lg font-light text-gray-500 whitespace-pre-line'>
+        {i18n.E404.content}
+      </p>
+      <Button href={i18n.routes['home.index']} large variant='secondary'
+        >{i18n.buttons.back}</Button
+      >
+    </Box>
+  </Section>
+</Main>

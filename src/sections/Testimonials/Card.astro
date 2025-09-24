@@ -1,0 +1,38 @@
+---
+import { Image } from 'astro:assets'
+
+import misc from '@/lib/images/misc'
+
+import H from '@/components/H.astro'
+
+interface Props {
+  picture: string
+  title: string
+  content: string
+  name: string
+  job: string
+}
+
+const { picture, title, content, name, job } = Astro.props
+---
+
+<section class='bg-white grid grid-cols-1 grid-rows-[1fr_auto] h-full border border-gray-200 shadow-[0rem_0.8125rem_1rem_rgba(0,0,0,0.08)] rounded-2xl overflow-hidden relative'>
+  <Image src={misc.quotes} alt="" width={125} height={365} format='svg' class="absolute z-0 top-5 right-5" />
+  <div class='px-5 py-10 sm:px-10 relative z-10'>
+    <H type='h3' line={false} class='!mb-5'>{title}</H>
+    <p>{content}</p>
+  </div>
+  <div class='bg-gray-300 px-5 py-10 sm:px-10 flex flex-col xs:flex-row gap-5 items-center relative z-10'>
+    <Image
+      src={picture}
+      alt={name}
+      width='80'
+      height='80'
+      class='rounded-full'
+    />
+    <span class='text-secondary'>
+      <p class='pb-0 text-lg sm:text-xl font-bold'>{name}</p>
+      <p class='pt-0 text-base sm:text-lg font-medium'>{job}</p>
+    </span>
+  </div>
+</section>

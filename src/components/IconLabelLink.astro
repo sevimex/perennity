@@ -1,0 +1,33 @@
+---
+import FaIcon from '@/components/FaIcon.astro'
+import Anchor from './Anchor.astro'
+
+interface Props {
+  icon: string
+  lib?: 'brands' | 'solid' | 'regular' | undefined
+  label:  string
+  cta: {
+    label: string
+    href: string
+    blank?: boolean
+  }
+}
+
+const { icon, lib = 'solid', label, cta } = Astro.props
+---
+
+<div class='flex gap-4'>
+  <span class='flex flex-col flex-[0_0_auto] items-center justify-center bg-secondary text-white h-[3.125rem] w-[3.125rem] rounded-[0.375rem]'>
+    <FaIcon icon={icon} lib={lib} class='text-xl' />
+  </span>
+  <div>
+    <span class='block whitespace-pre-line font-medium'>{label}</span>
+    <Anchor
+      href={cta.href}
+      target={cta.blank ? '_blank' : undefined}
+      class='text-secondary hover:text-primary underline text-sm font-semibold'
+    >
+      {cta.label}
+    </Anchor>
+  </div>
+</div>

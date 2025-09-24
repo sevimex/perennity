@@ -1,0 +1,67 @@
+---
+import 'hamburgers/dist/hamburgers.css'
+---
+
+<button class='hamburger hamburger--spin' type='button'>
+  <span class='hamburger-box'>
+    <span class='hamburger-inner'></span>
+  </span>
+</button>
+
+<style>
+  .hamburger {
+    display: flex;
+    padding: 0.3135rem;
+    width: 2.5rem;
+  }
+
+  .hamburger .hamburger-inner,
+  .hamburger .hamburger-inner::before,
+  .hamburger .hamburger-inner::after {
+    background-color: theme(colors.white);
+    height: 0.1875rem;
+    width: 100%;
+  }
+
+  .hamburger.is-active .hamburger-inner,
+  .hamburger.is-active .hamburger-inner::before,
+  .hamburger.is-active .hamburger-inner::after {
+    background-color: theme(colors.secondary);
+  }
+</style>
+
+<script>
+  const hm = document.querySelector('button.hamburger')
+  const navContainer = document.querySelector('[css-nav-container]')
+
+  if (hm && navContainer) {
+    hm.addEventListener('click', (event) => {
+      hm.classList.toggle('is-active')
+      navContainer.classList.toggle('!block')
+      event.stopPropagation()
+    })
+
+    document.addEventListener('click', (event) => {
+      const target = event.target as Node
+
+      if (
+        navContainer.classList.contains('!block') &&
+        !navContainer.contains(target) &&
+        !hm.contains(target)
+      ) {
+        navContainer.classList.remove('!block')
+        hm.classList.remove('is-active')
+      }
+    })
+
+    setTimeout(() => {
+      const items = navContainer?.querySelectorAll('a')
+      items?.forEach((item) => {
+        item.addEventListener('click', (event) => {
+          navContainer.classList.remove('!block')
+          hm.classList.remove('is-active')
+        })
+      })
+    }, 800)
+  }
+</script>

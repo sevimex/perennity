@@ -1,0 +1,65 @@
+---
+import { getI18n } from '@/i18n/utils'
+
+import Box from '@/components/Box.astro'
+import Logo from '@/components/Logo.astro'
+import Anchor from '@/components/Anchor.astro'
+
+interface Props {}
+
+const i18n = getI18n(Astro)
+---
+
+<footer
+  class='main-footer bg-gradient-to-r from-blue-100 to-blue-200 text-white py-5'
+>
+  <Box class='flex flex-col md:flex-row gap-5 items-center justify-between'>
+    <Anchor href={i18n.routes['home.index']}>
+      <Logo theme='white' width='3.125rem' />
+    </Anchor>
+    <div>
+      <p class='text-center text-balance'>{i18n.any.footerCopy}</p>
+      <p class='text-center text-balance pt-0'>
+        <Anchor href={i18n.routes['privacy.index']} class='underline'>
+          {i18n.buttons.privacyNotice}
+        </Anchor>
+      </p>
+    </div>
+    <a href='https://dinkbit.com' target='_blank' class='mt-4 md:mt-0'>
+      <img
+        src='https://dinkbit.s3.amazonaws.com/img/firmas/dinkbit-hca-blanco.png'
+        alt='dinkbit'
+        width='88'
+        height='40'
+      />
+    </a>
+  </Box>
+</footer>
+
+<style>
+  footer {
+    grid-area: footer;
+  }
+</style>
+
+<script>
+  import isVisible from '@/helpers/isVisible'
+
+  setTimeout(() => {
+    const footer = document.querySelector('.main-footer')
+    const whatsAppChatBox = document.querySelector('.floating-whatsapp-chatbox')
+    const whatsAppButton = document.querySelector('.floating-whatsapp-button')
+
+    isVisible(footer as HTMLElement, {
+      inOut: true,
+      visible: () => {
+        whatsAppChatBox?.classList.add('up')
+        whatsAppButton?.classList.add('up')
+      },
+      notVisible: () => {
+        whatsAppChatBox?.classList.remove('up')
+        whatsAppButton?.classList.remove('up')
+      }
+    })
+  }, 1000)
+</script>

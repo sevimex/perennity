@@ -1,0 +1,94 @@
+---
+// @ts-ignore
+import { FontAwesomeIcon } from 'react-bee'
+
+import styles from './styles.module.css'
+
+import Anchor from '@/components/Anchor.astro'
+
+interface Props {
+  page: string | number
+  pages: number
+  queryName?: string
+  onEachSide?: number
+  prevNextBtn?: boolean
+  firstLastBtn?: boolean
+  class?: string
+}
+
+const {
+  page: currentPage = 1,
+  pages,
+  queryName = 'page',
+  onEachSide = 2,
+  prevNextBtn = true,
+  firstLastBtn = false,
+  class: className
+} = Astro.props
+
+const page = parseInt(currentPage as string)
+
+const prevPages = page - onEachSide
+const nextPages = page + onEachSide
+const from = prevPages < 1 ? 1 : prevPages
+const to = nextPages > pages ? pages : nextPages
+
+// prettier-ignore
+const range = (start: number, stop:number , step = 1) => Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + i * step)
+const pathname = Astro.url.pathname
+---
+
+<nav class:list={[styles['paginate'], className]}>
+  <ul>
+    {
+      firstLastBtn && (
+        <li>
+          <Anchor href={`${pathname}?${queryName}=1`}>
+            <FontAwesomeIcon client:only='react' icon='angles-left' />
+          </Anchor>
+        </li>
+      )
+    }
+    {
+      prevNextBtn && (
+        <li>
+          <Anchor href={`${pathname}?${queryName}=${page}`}>
+            <FontAwesomeIcon client:only='react' icon='angle-left' />
+          </Anchor>
+        </li>
+      )
+    }
+    {
+      range(from, to).map((p) => (
+        <li>
+          <Anchor
+            href={`${pathname}?${queryName}=${p}`}
+            data-active={p === page}
+          >
+            {p}
+          </Anchor>
+        </li>
+      ))
+    }
+    {
+      prevNextBtn && (
+        <li>
+          <Anchor
+            href={`${pathname}?${queryName}=${page < pages ? page + 1 : pages}`}
+          >
+            <FontAwesomeIcon client:only='react' icon='angle-right' />
+          </Anchor>
+        </li>
+      )
+    }
+    {
+      firstLastBtn && (
+        <li>
+          <Anchor href={`${pathname}?${queryName}=${pages}`}>
+            <FontAwesomeIcon client:only='react' icon='angles-right' />
+          </Anchor>
+        </li>
+      )
+    }
+  </ul>
+</nav>

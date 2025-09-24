@@ -1,0 +1,25 @@
+---
+interface Props {
+  children: any
+  liquid?: boolean
+  class?: string
+}
+
+const { class: className, liquid, ...props } = Astro.props
+---
+
+<div class:list={['box', { '--liquid': liquid }, className]} {...props}>
+  <slot />
+</div>
+
+<style>
+  .box {
+    @apply max-w-screen-xl
+    mx-auto
+    px-5;
+
+    &.--liquid {
+      @apply max-w-none;
+    }
+  }
+</style>

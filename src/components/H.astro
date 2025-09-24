@@ -1,0 +1,63 @@
+---
+interface Props {
+  children: any
+  type: 'h1' | 'h2' | 'h3'
+  class?: string
+  content?: string
+  line?: boolean
+  lineCenter?: boolean
+}
+
+const {
+  class: className,
+  type,
+  content,
+  line = true,
+  lineCenter = true,
+  ...props
+} = Astro.props
+
+const Tag = type
+---
+
+{
+  line && (
+    <span class={`h-[0.25rem] w-[6.25rem] bg-blue-400 rounded-sm block ${lineCenter ? 'mx-auto ' : ''} mb-4`} />
+  )
+}
+<Tag class:list={[className]} {...props}>
+  <slot />
+</Tag>
+{
+  content && (
+    <p
+      set:html={content}
+      class='whitespace-pre-line text-sm sm:text-base text-balance mt-4'
+    />
+  )
+}
+
+<style>
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+  }
+
+  h1 {
+    font-size: clamp(1.75rem, 1.5357rem + 1.0714vw, 2.5rem);
+  }
+
+  h2 {
+    font-size: clamp(1.75rem, 1.5357rem + 1.0714vw, 2.5rem);
+  }
+
+  h3 {
+    font-size: clamp(1.125rem, 1.0179rem + 0.5357vw, 1.5rem);
+  }
+</style>

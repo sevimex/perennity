@@ -1,0 +1,29 @@
+---
+import { getI18n } from '@/i18n/utils'
+
+import Box from '@/components/Box.astro'
+import Section from '@/components/Section.astro'
+import H from '@/components/H.astro'
+
+import Card from './Card.astro'
+
+interface Props {}
+
+const i18n = getI18n(Astro)
+---
+
+<Section id='table' class='bg-gray-500 relative'>
+  <Box
+    class='mb-10 lg:mb-20 flex flex-col md:flex-row md:gap-20 justify-between relative z-10'
+  >
+    <div>
+      <H type='h2' lineCenter={false} '>
+        {i18n.sections.table.title}
+      </H>
+    </div>
+    <p class='text-pretty mt-4'>{i18n.sections.table.titleContent}</p>
+  </Box>
+  <Box class='grid grid-cols-1 md:grid-cols-2 gap-10 relative z-10 items-start'>
+    {i18n.sections.table.cards.map((card) => <Card card={card as any}} />)}
+  </Box>
+</Section>

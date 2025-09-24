@@ -1,0 +1,19 @@
+---
+  const TAGID = import.meta.env.PUBLIC_TAG_MANAGER
+---
+
+{
+  import.meta.env.PUBLIC_ENV === 'production' && (
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe
+        src=`https://www.googletagmanager.com/ns.html?id=${TAGID}`
+        height='0'
+        width='0'
+        style='display:none;visibility:hidden'
+      >
+      </iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+  )
+}

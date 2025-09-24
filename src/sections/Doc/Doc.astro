@@ -1,0 +1,20 @@
+---
+import Section from '@/components/Section.astro'
+import Box from '@/components/Box.astro'
+import H from '@/components/H.astro'
+
+interface Props {
+  id: string
+  title: string
+  body: string
+}
+
+const { id, title, body } = Astro.props
+---
+
+<Section id={id}>
+  <Box>
+    <H type='h1' class='text' lineCenter={false}>{title}</H>
+    <div class="mt-10" set:html={body} class="whitespace-pre-line"></div>
+  </Box>
+</Section>

@@ -1,0 +1,55 @@
+---
+import tailwindConfig from 'tailwind.config.mjs'
+
+import { getI18n } from '@/i18n/utils'
+
+import Box from '@/components/Box.astro'
+import Section from '@/components/Section.astro'
+import H from '@/components/H.astro'
+import Particles from '@/components/Particles'
+
+import Card from './Card.astro'
+
+interface Props {}
+
+const i18n = getI18n(Astro)
+---
+
+<Section id='testimonials' class='bg-gray-100 relative'>
+  <div class="absolute h-full w-1/2 top-0 left-0 z-0">
+    <!-- @ts-ignore -->
+    <Particles
+      client:only='react'
+      color={tailwindConfig.theme?.colors.gray[200]}
+      min={1}
+      max={5}
+    />
+  </div>
+  <Box class='text-center mb-10 lg:mb-20 relative z-10'>
+    <H type='h2'>{i18n.sections.testimonials.title}</H>
+  </Box>
+  <Box class='relative z-10'>
+    <section
+      class='splide testimonials-carousel'
+      aria-label={i18n.sections.testimonials.title}
+    >
+      <div class='splide__track'>
+        <ul class='splide__list'>
+          {
+            i18n.sections.testimonials.items.map((testimonial) => (
+              <li class='splide__slide pb-8 px-3'>
+                <Card {...testimonial} />
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+  </Box>
+</Section>
+
+<script>
+  import { splideCarousel } from './scripts.ts'
+
+  splideCarousel()
+</script>

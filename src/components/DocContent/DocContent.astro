@@ -1,0 +1,16 @@
+---
+import Box from '@/components/Box.astro'
+import Section from '@/components/Section.astro'
+
+interface Props {
+  content: string
+}
+
+const { content } = Astro.props
+---
+
+<Section id='doct-content'>
+  <Box class='!max-w-[55.625rem]'>
+    <div set:html={content} />
+  </Box>
+</Section>

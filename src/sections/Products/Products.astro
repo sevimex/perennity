@@ -1,0 +1,29 @@
+---
+import { getI18n, config } from '@/i18n/utils'
+
+import Box from '@/components/Box.astro'
+import Section from '@/components/Section.astro'
+import H from '@/components/H.astro'
+import Fade from '@/components/Fade.astro'
+
+import Card from './Card.astro'
+
+interface Props {}
+
+const i18n = getI18n(Astro)
+---
+
+<Section id='products'>
+  <Box class='text-center mb-32 lg:mb-36 !max-w-[50rem]'>
+    <H type='h2' content={i18n.sections.products.titleContent}>
+      {i18n.sections.products.title}
+    </H>
+  </Box>
+  <Box class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-28'>
+    {i18n.sections.products.items.map((product) => (
+      <Fade>
+        <Card {...product} />
+      </Fade>
+    ))}
+  </Box>
+</Section>

@@ -1,0 +1,28 @@
+---
+import { getI18n } from '@/i18n/utils'
+
+import Box from '@/components/Box.astro'
+import Section from '@/components/Section.astro'
+import H from '@/components/H.astro'
+import { Image } from 'astro:assets'
+
+interface Props {}
+
+const i18n = getI18n(Astro)
+---
+
+<Section id='certifications' class='overflow-hidden'>
+  <Box class='text-center mb-10 lg:mb-20'>
+    <H type='h2' content={i18n.sections.certifications.titleContent}>
+      {i18n.sections.certifications.title}
+    </H>
+  </Box>
+  <Box class='flex flex-wrap gap-x-10 gap-y-5 justify-center relative mt-20'>
+    <span class="text-gray-400 font-medium text-3xl xs:text-[2.5rem] sm:text-[4.375rem] md:text-[5rem] lg:text-[5.9375rem] absolute top-[1/2] left-1/2 -translate-x-1/2 -translate-y-1/2 z-0">{i18n.sections.certifications.label}</span>
+    {
+      i18n.sections.certifications.certifications.map((certification) => (
+        <Image src={certification.logo} alt={certification.alternativeText} width={125} height={40} class="relative z-10" />
+      ))
+    }
+  </Box>
+</Section>

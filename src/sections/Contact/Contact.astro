@@ -1,0 +1,69 @@
+---
+import { getI18n, config } from '@/i18n/utils'
+
+import Box from '@/components/Box.astro'
+import Section from '@/components/Section.astro'
+import H from '@/components/H.astro'
+import IconLabelLink from '@/components/IconLabelLink.astro'
+
+import Form from './Form'
+
+interface Props {}
+
+const { currentLocale = config.defaultLocale } = Astro
+const i18n = getI18n(Astro)
+---
+
+<Section id='contact'>
+  <Box class='text-center mb-10 lg:mb-20'>
+    <H type='h2' content={i18n.sections.contact.titleContent}>
+      {i18n.sections.contact.title}
+    </H>
+  </Box>
+  <Box>
+    <div class='grid grid-cols-1 lg:grid-cols-[25rem_31.25rem] gap-14 justify-around !max-w-[37.5rem] lg:!max-w-full mx-auto'>
+      <div class='flex flex-col gap-4 order-2 lg:order-1'>
+        <IconLabelLink
+          icon='map-marker-alt'
+          label={i18n.sections.contact.info.address.label}
+          cta={{
+            label: i18n.buttons.seeMap,
+            href: i18n.sections.contact.info.address.map,
+            blank: true
+          }}
+        />
+        <IconLabelLink
+          icon='mobile'
+          label={i18n.sections.contact.info.phone.large}
+          cta={{
+            label: i18n.buttons.call,
+            href: `tel:${i18n.sections.contact.info.phone.short}`,
+            blank: true
+          }}
+        />
+        <IconLabelLink
+          icon='whatsapp'
+          lib="brands"
+          label={i18n.sections.contact.info.whatsapp.large}
+          cta={{
+            label: i18n.buttons.write,
+            href: `${i18n.sections.contact.info.whatsapp.url}`,
+            blank: true
+          }}
+        />
+        <IconLabelLink
+          icon='envelope'
+          label={i18n.sections.contact.info.email}
+          cta={{
+            label: i18n.buttons.write,
+            href: `mailto:${i18n.sections.contact.info.email}`,
+            blank: true
+          }}
+        />
+      </div>
+      <div class='order-1 lg:order-2'>
+        <Form client:only='react' i18n={i18n} currentLocale={currentLocale} />
+      </div>
+    </div>
+  </Box>
+</Section>

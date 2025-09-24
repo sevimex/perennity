@@ -1,0 +1,121 @@
+---
+import { getI18n } from '@/i18n/utils'
+import Button from '@/components/Button/Button.astro'
+import FaIcon from '@/components/FaIcon.astro'
+import H from '@/components/H.astro'
+
+const i18n = getI18n(Astro)
+
+interface Item {
+  label: string
+  check: boolean
+  optional: boolean
+}
+
+interface CardSection {
+  title: string
+  items: Item[]
+}
+
+interface Card {
+  title: string
+  content: string
+  items: CardSection[]
+}
+
+interface Props {
+  card: Card
+}
+
+const { card } = Astro.props as Props
+---
+
+<section class='bg-white rounded-2xl'>
+  <div class='px-5 pt-14 text-center'>
+    <H type='h3' line={false}>{card.title}</H>
+    <p class='pt-4'>{card.content}</p>
+  </div>
+  <div class='collapse-table hidden pt-14'>
+    {
+      card.items.map(({ title, items }) => (
+        <table class='w-full'>
+          <thead>
+            <tr>
+              <th colspan='2' class='text-left py-4 px-5 bg-blue-500'>
+                {title}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map(({ label, check, optional }) => (
+              <tr
+                class:list={[
+                  'odd:bg-gray-600',
+                  { 'max-md:hidden': !check && !optional }
+                ]}
+              >
+                <td class='text-sm px-5 py-4'>{label}</td>
+                <td class='pr-5 py-4 text-center w-[6.25rem]'>
+                  {optional ? (
+                    <span class='text-xs font-medium text-gray-700'>
+                      {i18n.any.optional}
+                    </span>
+                  ) : check ? (
+                    <FaIcon icon='check' class='text-secondary text-lg' />
+                  ) : (
+                    <FaIcon icon='minus' class='text-lg' />
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ))
+    }
+  </div>
+  <div class='px-5 pb-14 pt-5 text-center'>
+    <a
+      js-openCollapse
+      class='mb-6 text-sm flex gap-2 items-center justify-center select-none cursor-pointer'
+    >
+      {i18n.buttons.showFeatures}
+      <FaIcon icon='caret-down' />
+    </a>
+    <a
+      js-closeCollapse
+      class='mb-6 text-sm flex gap-2 items-center justify-center select-none cursor-pointer hidden'
+    >
+      {i18n.buttons.hideFeatures}
+      <FaIcon icon='caret-up' />
+    </a>
+    <Button href={i18n.any.hubspotUrl} target='_blank' variant='secondary'
+      >{i18n.buttons.scheduleADemo}</Button
+    >
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.collapse-table').forEach((collapseTable) => {
+      const sibling = collapseTable.nextElementSibling
+      if (sibling) {
+        const openButton = sibling.querySelector('[js-openCollapse]')
+        const closeButton = sibling.querySelector('[js-closeCollapse]')
+
+        if (openButton && closeButton) {
+          openButton.addEventListener('click', () => {
+            collapseTable.classList.remove('hidden')
+            openButton.classList.add('hidden')
+            closeButton.classList.remove('hidden')
+          })
+
+          closeButton.addEventListener('click', () => {
+            collapseTable.classList.add('hidden')
+            openButton.classList.remove('hidden')
+            closeButton.classList.add('hidden')
+          })
+        }
+      }
+    })
+  })
+</script>

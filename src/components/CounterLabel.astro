@@ -1,0 +1,60 @@
+---
+interface Props {
+  number: number
+  duration: number
+  prefix?: string
+  suffix?: string
+  label: string
+}
+
+const { number, prefix, suffix, label, duration = 5000 } = Astro.props
+---
+
+<div class='flex flex-col gap-1 items-center'>
+  <span class='flex gap-1 justify-center text-5xl font-secondary'>
+    {prefix && <span>{prefix}</span>}
+    <span js-counter={number} js-duration={duration} class="text-primary">0</span>
+    {suffix && <span>{suffix}</span>}
+  </span>
+  <span class='text-2xl'>{label}</span>
+</div>
+
+<script>
+  import isVisible from '@/helpers/isVisible'
+
+  const animateCounter = (
+    counter: HTMLElement,
+    targetNumber: number,
+    duration: number
+  ) => {
+    const totalFrames = Math.round(duration / (1000 / 60))
+    let frame = 0
+
+    const countUp = () => {
+      frame++
+      const progress = Math.min(frame / totalFrames, 1)
+      const value = Math.round(progress * targetNumber)
+      counter.textContent = value.toString()
+
+      counter.textContent = value.toLocaleString()
+
+      if (progress < 1) requestAnimationFrame(countUp)
+    }
+
+    requestAnimationFrame(countUp)
+  }
+
+  const counters = document.querySelectorAll('[js-counter]')
+
+  counters.forEach((counter) => {
+    const targetNumber = parseInt(counter.getAttribute('js-counter') || '0', 10)
+    const duration = parseInt(counter.getAttribute('js-duration') || '5000', 10)
+
+    isVisible(counter, {
+      visible: () => animateCounter(counter as HTMLElement, targetNumber, duration),
+      notVisible: () => {
+        counter.textContent = '0'
+      }
+    })
+  })
+</script>

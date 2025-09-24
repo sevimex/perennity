@@ -1,0 +1,143 @@
+---
+import { getI18n } from '@/i18n/utils'
+import '@fontsource-variable/montserrat'
+
+import { setDayjs } from '@/helpers/getDate'
+
+import GTMHead from '@/components/GTM/Head.astro'
+
+interface Props {
+  title?: string
+  description?: string
+  keywords?: string
+  share?: string
+}
+
+const i18n = getI18n(Astro)
+
+const { title = '...', description, keywords, share } = Astro.props
+
+const locale = Astro.currentLocale
+const host = import.meta.env.PUBLIC_URL
+const pathname = Astro.url.pathname
+const url = `${host}${pathname}`
+
+const name = i18n.seo.name
+const slogan = i18n.seo.slogan
+const _description = description ?? i18n.seo.description
+const _keywords = keywords ?? i18n.seo.keywords
+
+const _title = pathname === '/' ? `${name} | ${slogan}` : `${title} | ${name}`
+const icoRoute = `${host}/img/ico`
+const _share = share ?? `${icoRoute}/${i18n.seo.share}`
+
+setDayjs(Astro.currentLocale as string)
+---
+
+<head>
+  <title>{_title}</title>
+  <meta charset='UTF-8' />
+  <meta name='description' content={_description} />
+  <meta name='keywords' content={_keywords} />
+  <meta name='generator' content={Astro.generator} />
+  <meta name='viewport' content='width=device-width' />
+
+  <meta name='theme-color' content='siteMainColor' />
+  <link rel='icon' type='image/svg+xml' href='/favicon.ico' />
+
+  <!-- Share -->
+  <meta property='og:locale' content={locale} />
+  <meta property='og:title' content={_title} />
+  <meta property='og:description' content={_description} />
+  <meta property='og:image' content={_share} />
+  <meta property='og:url' content={url} />
+  <meta property='og:type' content='website' />
+  <meta property='og:image:width' content='1200' />
+  <meta property='og:image:height' content='630' />
+  <meta property='og:site_name' content={name} />
+  <meta name='twitter:site' content={`@${name}`} />
+  <meta name='twitter:card' content='summary_large_image' />
+  <meta name='twitter:image' content={_share} />
+
+  <!-- MICROSOFT ICONS -->
+  <meta
+    name='msapplication-TileImage'
+    content={`${icoRoute}/ms-icon-144x144.png`}
+  />
+
+  <!-- APPLE ICONS -->
+  <link
+    rel='apple-touch-icon'
+    sizes='57x57'
+    href={`${icoRoute}/apple-icon-57x57.png`}
+  />
+  <link
+    rel='apple-touch-icon'
+    sizes='60x60'
+    href={`${icoRoute}/apple-icon-60x60.png`}
+  />
+  <link
+    rel='apple-touch-icon'
+    sizes='72x72'
+    href={`${icoRoute}/apple-icon-72x72.png`}
+  />
+  <link
+    rel='apple-touch-icon'
+    sizes='76x76'
+    href={`${icoRoute}/apple-icon-76x76.png`}
+  />
+  <link
+    rel='apple-touch-icon'
+    sizes='114x114'
+    href={`${icoRoute}/apple-icon-114x114.png`}
+  />
+  <link
+    rel='apple-touch-icon'
+    sizes='120x120'
+    href={`${icoRoute}/apple-icon-120x120.png`}
+  />
+  <link
+    rel='apple-touch-icon'
+    sizes='144x144'
+    href={`${icoRoute}/apple-icon-144x144.png`}
+  />
+  <link
+    rel='apple-touch-icon'
+    sizes='152x152'
+    href={`${icoRoute}/apple-icon-152x152.png`}
+  />
+  <link
+    rel='apple-touch-icon'
+    sizes='180x180'
+    href={`${icoRoute}/apple-icon-180x180.png`}
+  />
+
+  <!-- ANDROID ICONS -->
+  <link
+    rel='icon'
+    type='image/png'
+    sizes='16x16'
+    href={`${icoRoute}/favicon-16x16.png`}
+  />
+  <link
+    rel='icon'
+    type='image/png'
+    sizes='32x32'
+    href={`${icoRoute}/favicon-32x32.png`}
+  />
+  <link
+    rel='icon'
+    type='image/png'
+    sizes='96x96'
+    href={`${icoRoute}/favicon-96x96.png`}
+  />
+  <link
+    rel='icon'
+    type='image/png'
+    sizes='192x192'
+    href={`${icoRoute}/android-icon-192x192.png`}
+  />
+  <link rel='manifest' href={`${icoRoute}/manifest.json`} />
+
+  <GTMHead />
+</head>

@@ -1,0 +1,46 @@
+---
+import { getI18n } from '@/i18n/utils'
+
+import '@/styles/global.css'
+
+import misc from '@/lib/images/misc'
+
+import Head from '@/layouts/Main/Head.astro'
+import Header from '@/layouts/Main/Header.astro'
+import Sections from '@/layouts/Main/Sections.astro'
+import Footer from '@/layouts/Main/Footer.astro'
+import WhatsAppWidget from '@/components/WhatsAppWidget'
+import GTMBody from '@/components/GTM/Body.astro'
+
+const { ...headProps } = Astro.props
+const i18n = getI18n(Astro)
+---
+
+<!doctype html>
+<html lang={Astro.currentLocale}>
+  <Head {...headProps} />
+  <body>
+    <GTMBody />
+    <Sections>
+      <Header />
+      <slot />
+      <WhatsAppWidget
+        client:only='react'
+        company={i18n.seo.name}
+        phone={i18n.sections.contact.info.whatsapp.short}
+        message={i18n.sections.contact.info.whatsapp.message}
+        avatar={misc.avatar.src}
+        i18n={i18n.whatsapp}
+      />
+    </Sections>
+    <Footer />
+    <style>
+      body {
+        display: grid;
+        grid-template-areas: 'header' 'main' 'footer';
+        grid-template-columns: 100%;
+        grid-template-rows: [header] auto [main] 1fr [footer] auto;
+      }
+    </style>
+  </body>
+</html>

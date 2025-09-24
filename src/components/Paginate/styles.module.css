@@ -1,0 +1,29 @@
+.paginate {
+  display: inline-block;
+
+  & ul {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+    margin: 0rem;
+    padding: 0rem;
+
+    & li {
+      list-style: none;
+
+      & a,
+      & span {
+        color: theme(colors.primary);
+        font-size: 1.125rem;
+        font-weight: 600;
+        opacity: 0.5;
+        transition: opacity 0.2s ease;
+
+        &[data-active] {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}

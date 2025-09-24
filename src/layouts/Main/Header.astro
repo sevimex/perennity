@@ -1,0 +1,54 @@
+---
+import { getI18n } from '@/i18n/utils'
+
+import Box from '@/components/Box.astro'
+import LogoIcon from '@/components/LogoIcon.astro'
+import Anchor from '@/components/Anchor.astro'
+import Button from '@/components/Button/Button.astro'
+import Hm from '@/components/Hm/Hm.astro'
+
+import Nav from './Nav/Nav.astro'
+
+interface Props {}
+const i18n = getI18n(Astro)
+---
+
+<header
+  class='sticky top-0 bg-gradient-to-r from-blue-100 to-blue-200 text-white py-2 z-[999] shadow-[0rem_0.8125rem_1rem_rgba(0,0,0,0.08)]'
+>
+  <Box
+    class='grid grid-cols-[auto_auto] justify-between lg:grid-cols-[auto_1fr_auto] items-center gap-5'
+  >
+    <div>
+      <Anchor href={i18n.routes['home.index']}>
+        <LogoIcon theme='white' width='3rem' />
+      </Anchor>
+    </div>
+    <Nav />
+    <div class='flex gap-4 items-center'>
+      <Button
+        href={i18n.any.hubspotUrl}
+        target='_blank'
+        variant='third'
+        fit
+        class='!hidden sm:!block'>{i18n.buttons.scheduleADemo}</Button
+      >
+      <Button
+        href={i18n.any.hubspotUrl}
+        target='_blank'
+        variant='third'
+        fit
+        class='sm:!hidden'>{i18n.buttons.schedule}</Button
+      >
+      <span class="lg:hidden">
+        <Hm />
+      </span>
+    </div>
+  </Box>
+</header>
+
+<style>
+  header {
+    grid-area: header;
+  }
+</style>

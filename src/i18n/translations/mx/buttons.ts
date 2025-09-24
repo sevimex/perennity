@@ -1,0 +1,17 @@
+export default {
+  privacyNotice: 'Aviso de privacidad',
+  seeMap: 'Ver mapa',
+  call: 'Llamar',
+  write: 'Escribir',
+  back: 'Volver',
+  send: 'Enviar',
+  sending: 'Enviando...',
+  knowMore: 'Conoce más',
+  solutions: 'Soluciones',
+  products: 'Productos',
+  scheduleADemo: 'Agenda un demo',
+  demo: 'Demo',
+  schedule: 'Agenda',
+  hideFeatures: 'Ocultar características',
+  showFeatures: 'Ver características',
+}

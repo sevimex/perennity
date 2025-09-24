@@ -1,0 +1,37 @@
+---
+import { locales } from '@/i18n/utils'
+
+import getCurrentRouteName, {
+  getCurrentRouteByPrefix
+} from '@/helpers/getCurrentRouteName'
+
+interface Props {
+  class?: string
+}
+
+const { class: className, ...props } = Astro.props
+const { currentRouteName } = getCurrentRouteName(Astro)
+---
+
+<ul class:list={['nav', className]} {...props}>
+  {
+    Object.entries(locales).map(([prefix, lang]) => {
+      const { route, locale } = getCurrentRouteByPrefix({
+        prefix,
+        currentRouteName
+      })
+      const labelFormatted = lang.split('-')[0].toUpperCase()
+
+      return (
+        <li>
+          <a
+            href={`${locale}${route}`}
+            class:list={[{ selected: Astro.currentLocale === lang }]}
+          >
+            {labelFormatted}
+          </a>
+        </li>
+      )
+    })
+  }
+</ul>

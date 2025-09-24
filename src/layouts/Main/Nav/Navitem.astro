@@ -1,0 +1,16 @@
+---
+import ScrollTo from '@/components/ScrollTo'
+
+interface Props {
+  to: string
+  label: string
+}
+
+const { to, label } = Astro.props
+---
+
+<ScrollTo client:only="react" to={to}>
+  <span class:list={[]}>
+    {label}
+  </span>
+</ScrollTo>

@@ -1,0 +1,17 @@
+---
+import Main from '@/layouts/Main.astro'
+
+import { getI18n } from '@/i18n/utils'
+
+import Doc from '@/sections/Doc/Doc.astro'
+
+const i18n = getI18n(Astro)
+---
+
+<Main title={i18n.titles.privacyPolicy}>
+  <Doc
+    id='privacy-notice'
+    title={i18n.sections.privacyNotice.title}
+    body={i18n.sections.privacyNotice.body}
+  />
+</Main>

@@ -1,0 +1,36 @@
+---
+import tailwindConfig from 'tailwind.config.mjs'
+
+import { getI18n } from '@/i18n/utils'
+
+import Box from '@/components/Box.astro'
+import Section from '@/components/Section.astro'
+import H from '@/components/H.astro'
+import Particles from '@/components/Particles'
+
+import Card from './Card.astro'
+
+interface Props {}
+
+const i18n = getI18n(Astro)
+---
+
+<Section id='solutions' class='bg-gray-100 relative'>
+  <!-- @ts-ignore -->
+  <Particles client:only="react" color={tailwindConfig.theme?.colors.gray[200]} min={2} max={8} />
+  <Box class='mb-10 lg:mb-20 flex flex-col md:flex-row md:gap-20 justify-between relative z-10'>
+    <div>
+      <H type='h2' lineCenter={false} '>
+        {i18n.sections.solutions.title}
+      </H>
+    </div>
+    <p class='text-pretty mt-4'>{i18n.sections.solutions.titleContent}</p>
+  </Box>
+  <Box class='grid grid-cols-1 gap-10 lg:gap-20 relative z-10'>
+    {
+      i18n.sections.solutions.items.map((solution, index) => (
+        <Card {...solution} direction={index % 2 === 0 ? 'right' : 'left'} />
+      ))
+    }
+  </Box>
+</Section>

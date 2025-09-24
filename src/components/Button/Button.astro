@@ -1,0 +1,23 @@
+---
+import styles from './styles.module.css'
+
+import Anchor, { type Props as AnchorProps } from '@/components/Anchor.astro'
+
+export interface Props extends AnchorProps {
+  variant?: 'primary' | 'secondary' | 'third'
+  large?: boolean
+  fit?: boolean
+}
+
+const { variant = 'primary', large, fit, class: className, ...props } = Astro.props
+---
+
+<Anchor
+  class:list={[styles['btn'], className]}
+  css-variant={variant}
+  css-large={large}
+  css-fit={fit}
+  {...props}
+>
+  <slot />
+</Anchor>

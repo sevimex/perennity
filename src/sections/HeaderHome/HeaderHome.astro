@@ -1,0 +1,74 @@
+---
+import Image from 'astro/components/Image.astro'
+import tailwindConfig from 'tailwind.config.mjs'
+
+import { getI18n } from '@/i18n/utils'
+
+import backgrounds from '@/lib/images/background'
+import misc from '@/lib/images/misc'
+
+import styles from '@/components/Button/styles.module.css'
+
+import Box from '@/components/Box.astro'
+import Section from '@/components/Section.astro'
+import ScrollTo from '@/components/ScrollTo'
+import Particles from '@/components/Particles'
+
+interface Props {}
+
+const i18n = getI18n(Astro)
+---
+
+<Section
+  id='perennity'
+  class='!pb-0 relative text-white mb-20 lg:mb-10'
+>
+<div style={`background-image: url(${backgrounds.imagenFondoHero.src})`} class="overlay bg-cover bg-center absolute h-full w-full top-0 left-0">
+  <div class='bg-[radial-gradient(circle,_rgba(107,214,245,0.801)_0%,_rgba(107,214,245,0.395)_50%,_rgba(16,50,103,0.395)_100%)] absolute top-0 left-0 h-full w-full z-0'></div>
+  <!-- @ts-ignore -->
+  <Particles client:only="react" color={tailwindConfig.theme?.colors.blue[400]} min={2} max={8} />
+</div>
+
+  <Box class='relative z-10 text-center'>
+    <h1
+      class='leading-[0.9] font-bold mb-5'
+      style='font-size: clamp(2.5rem, 1.9643rem + 2.6786vw, 4.375rem);'
+    >
+      {i18n.sections.headerHome.title}
+      <br />
+      <span
+        class='font-medium'
+        style='font-size: clamp(1.625rem, 1.375rem + 1.25vw, 2.5rem);'
+      >
+        {i18n.sections.headerHome.subtitle}
+      </span>
+    </h1>
+    <div class='flex flex-wrap gap-5 justify-center mb-8 sm:mb-14'>
+      <ScrollTo
+        client:only='react'
+        to='solutions'
+        css-variant='ghost'
+        css-large='1'
+        class={styles['btn']}
+      >
+        {i18n.buttons.solutions}
+      </ScrollTo>
+      <ScrollTo
+        client:only='react'
+        to='products'
+        css-variant='ghost'
+        css-large='1'
+        class={styles['btn']}
+      >
+        {i18n.buttons.products}
+      </ScrollTo>
+    </div>
+    <Image src={misc.imagenSoftwareHero} alt="" width={1200} height={501} class="-mb-8 sm:-mb-24" />
+  </Box>
+</Section>
+
+<style>
+  .overlay {
+    clip-path: polygon(0 0, 100% 0, 100% 90%, 50% 100%, 0 90%);
+  }
+</style>

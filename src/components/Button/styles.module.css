@@ -1,0 +1,67 @@
+.btn {
+  border: solid 0.0625rem theme(colors.primary);
+  border-radius: 0.375rem;
+  display: inline-block;
+  font-weight: 500;
+  padding: 0.875rem 1.25rem;
+  text-align: center;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  user-select: none;
+
+  &[css-variant='primary'] {
+    background: theme(colors.primary);
+    border-color: theme(colors.primary);
+    color: theme(colors.white);
+
+    &:hover {
+      background: theme(colors.secondary);
+      border-color: theme(colors.secondary);
+      color: theme(colors.white);
+    }
+  }
+
+  &[css-variant='secondary'] {
+    background: theme(colors.secondary);
+    border-color: theme(colors.secondary);
+    color: theme(colors.white);
+
+    &:hover {
+      background: theme(colors.primary);
+      border-color: theme(colors.primary);
+      color: theme(colors.white);
+    }
+  }
+
+  &[css-variant='third'] {
+    background: theme(colors.secondary);
+    border-color: theme(colors.secondary);
+    color: theme(colors.white);
+
+    &:hover {
+      background: theme(colors.blue.400);
+      border-color: theme(colors.blue.400);
+      color: theme(colors.white);
+    }
+  }
+
+  &[css-variant='ghost'] {
+    @apply bg-primary/40 border-white/50;
+    color: theme(colors.white);
+
+    &:hover {
+      background: theme(colors.primary);
+      border-color: theme(colors.primary);
+      color: theme(colors.white);
+    }
+  }
+
+  &[css-large] {
+    min-width: 12.5rem;
+  }
+
+  &[css-fit] {
+    font-size: 0.875rem;
+    padding: 0.625rem 1.25rem;
+  }
+}

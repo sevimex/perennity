@@ -1,0 +1,36 @@
+---
+import { getI18n } from '@/i18n/utils'
+
+import Navitem from './Navitem.astro'
+
+const i18n = getI18n(Astro)
+---
+
+<nav class="
+hidden lg:block
+absolute lg:relative
+top-full lg:top-auto
+left-0  lg:left-auto
+w-full
+bg-primary lg:bg-[transparent]
+px-5 py-10 lg:!p-0
+" css-nav-container>
+  <ul class="
+  flex
+  flex-col lg:flex-row
+  gap-5
+  text-2xl lg:text-lg
+  font-semibold
+  justify-center
+  items-center
+  ">
+    {
+      i18n.navigation.main.map((item) => (
+        <li>
+          {/* @ts-ignore */}
+          <Navitem {...item} />
+        </li>
+      ))
+    }
+  </ul>
+</nav>
