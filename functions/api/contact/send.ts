@@ -1,53 +1,94 @@
-type ContactBody = { name?: string; email?: string; phone?: string; message?: string; turnstile?: string };
+// functions/api/contact/send.ts  (compatible con el contrato del form de la agencia)
+
+type BodyIn = {
+  locale?: string;
+  name?: string;
+  company?: string;
+  email?: string;
+  phone?: string;
+  message?: string;
+  comments?: string; // por si el form usa "comments"
+};
+
+type Errors = Record<string, string>;
+
 const isEmail = (v?: string) => !!v && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-const clean = (v?: string) => (v ?? '').toString().trim().replace(/[<>]/g, m => ({'<':'&lt;','>':'&gt;'}[m]!));
+const t = (msg: string) => msg; // si después quieres mensajes localizados, aquí haces el map por `locale`
 
-export const onRequestPost: PagesFunction = async (ctx) => {
+export const onRequestPost: PagesFunction = async ({ request, env }) => {
   try {
-    const { request, env } = ctx;
-    if (!request.headers.get('content-type')?.includes('application/json'))
-      return new Response(JSON.stringify({ error: true, reason: 'bad_content_type' }), { status: 200 });
-
-    const body = await request.json() as ContactBody;
-    if (!isEmail(body.email) || !body.name || !body.message)
-      return new Response(JSON.stringify({ error: true, reason: 'bad_request' }), { status: 200 });
-
-    // (Opcional) Turnstile
-    if (env.TURNSTILE_SECRET && body.turnstile) {
-      const form = new URLSearchParams();
-      form.append('secret', env.TURNSTILE_SECRET);
-      form.append('response', body.turnstile);
-      const ok = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', { method:'POST', body: form })
-        .then(r=>r.json()).then(r=>r.success as boolean);
-      if (!ok) return new Response(JSON.stringify({ error: true, reason: 'captcha_failed' }), { status: 200 });
+    if (!request.headers.get('content-type')?.includes('application/json')) {
+      return new Response(JSON.stringify({ error: true }), { status: 200 });
     }
 
-    const name = clean(body.name), email = clean(body.email), phone = clean(body.phone);
-    const message = clean(body.message).replace(/\n/g,'<br/>');
+    const body = (await request.json()) as BodyIn;
 
+    // Campos que el form de la agencia suele mandar
+    const name = (body.name ?? '').toString().trim();
+    const company = (body.company ?? '').toString().trim();
+    const email = (body.email ?? '').toString().trim();
+    const phone = (body.phone ?? '').toString().trim();
+    const message = (body.message ?? body.comments ?? '').toString().trim();
+
+    // Validación como hacía la API original: devolver `errors` por campo
+    const errors: Errors = {};
+    if (!name) errors.name = t('required');
+    if (!email || !isEmail(email)) errors.email = t('required');
+    if (!phone) errors.phone = t('required');
+    if (!message) errors.message = t('required');
+
+    if (Object.keys(errors).length) {
+      // El frontend espera exactamente { errors: {...} }
+      return new Response(JSON.stringify({ errors }), { status: 200 });
+    }
+
+    // Envío por Resend respetando tus variables
     const payload = {
-      from: env.MAIL_FROM,
-      to: env.MAIL_TO,
-      reply_to: email,
+      from: env.MAIL_FROM,          // ajusta esto en Cloudflare Pages
+      to: env.MAIL_TO,              // ajusta esto en Cloudflare Pages
+      reply_to: email,              // responde al correo del cliente
       subject: `Contacto :: ${new Date().toLocaleDateString('es-MX')}`,
-      html: `<h3>Nuevo contacto</h3>
-             <p><b>Nombre:</b> ${name}</p>
-             <p><b>Email:</b> ${email}</p>
-             <p><b>Teléfono:</b> ${phone}</p>
-             <p><b>Mensaje:</b><br/>${message}</p>`
+      html: `
+        <h3>NUEVO CONTACTO</h3>
+        <p><b>Nombre:</b> ${escapeHtml(name)}</p>
+        <p><b>Empresa:</b> ${escapeHtml(company)}</p>
+        <p><b>Email:</b> ${escapeHtml(email)}</p>
+        <p><b>Teléfono:</b> ${escapeHtml(phone)}</p>
+        <p><b>Mensaje:</b><br/>${escapeHtml(message).replace(/\n/g, '<br/>')}</p>
+      `,
+      text: `NUEVO CONTACTO
+
+Nombre: ${name}
+Empresa: ${company}
+Email: ${email}
+Teléfono: ${phone}
+
+Mensaje:
+${message}
+`
     };
 
     const resp = await fetch('https://api.resend.com/emails', {
       method: 'POST',
-      headers: { 'Authorization': `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+      headers: {
+        Authorization: `Bearer ${env.RESEND_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(payload)
     });
 
-    if (resp.ok) return new Response(JSON.stringify({ error: false }), { status: 200 });
-    console.error('Resend error', resp.status, await resp.text());
-    return new Response(JSON.stringify({ error: true, reason: 'provider_error' }), { status: 200 });
+    if (!resp.ok) {
+      // Error general: { error: true }
+      return new Response(JSON.stringify({ error: true }), { status: 200 });
+    }
+
+    // Éxito EXACTO para tu form: no `errors` y no `error`
+    return new Response(JSON.stringify({}), { status: 200 });
   } catch (e) {
-    console.error(e);
-    return new Response(JSON.stringify({ error: true, reason: 'server_error' }), { status: 200 });
+    return new Response(JSON.stringify({ error: true }), { status: 200 });
   }
 };
+
+function escapeHtml(s: string) {
+  return s.replace(/[&<>"']/g, (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m]!));
+}
