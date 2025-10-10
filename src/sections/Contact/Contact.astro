@@ -12,6 +12,12 @@ interface Props {}
 
 const { currentLocale = config.defaultLocale } = Astro
 const i18n = getI18n(Astro)
+
+const i18nForm = JSON.parse(JSON.stringify({
+  forms: i18n.forms,
+  buttons: i18n.buttons,
+  mail: i18n.mail,
+}))
 ---
 
 <Section id='contact'>
@@ -62,7 +68,7 @@ const i18n = getI18n(Astro)
         />
       </div>
       <div class='order-1 lg:order-2'>
-        <Form client:only='react' i18n={i18n} currentLocale={currentLocale} />
+        <Form client:visible i18n={i18nForm} currentLocale={currentLocale} />
       </div>
     </div>
   </Box>

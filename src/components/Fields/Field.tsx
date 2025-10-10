@@ -18,6 +18,8 @@ export interface FieldProps {
   className?: string
   basic?: string
   onChange?: () => void
+  autoComplete?: string
+  disabled?: boolean
 }
 
 interface Props {

@@ -30,6 +30,8 @@ interface Props extends SendingButtonProps, ResponseProps {
   error: boolean
   variant?: string
   label?: string
+  disabled?: boolean
+  'aria-disabled'?: boolean | 'true' | 'false'
 }
 
 export const Submit: React.FC<Props> = ({

@@ -1,15 +1,3 @@
-// const [success, setSuccess] = useState(false)
-// const [error, setError] = useState(false)
-
-/* Example
-  <Response
-    i18n={i18n}
-    success={success}
-    setSuccess={setSuccess}
-    error={error}
-  />
-*/
-
 import { useEffect } from 'react'
 
 export type Props = {
@@ -38,10 +26,17 @@ export const Response = ({
         setSuccess(false)
       }, 4000)
     }
-  }, [success])
+  }, [success, setError, setSuccess])
 
-  const goodText = successText ?? i18n.mail.messageHasBeenSentSuccessfully
-  const badText = errorText ?? i18n.mail.yourMessageHasNotBeenSent
+  const goodText =
+    successText ??
+    i18n?.mail?.messageHasBeenSentSuccessfully ??
+    'Tu mensaje se ha enviado correctamente'
+
+  const badText =
+    errorText ??
+    i18n?.mail?.yourMessageHasNotBeenSent ??
+    'Tu mensaje no ha sido enviado'
 
   return (
     <>
